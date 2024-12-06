@@ -10,4 +10,5 @@ public class PlayerData : ScriptableObject
     public float movementSpeed;
     public float jumpForce;
     [Range(0f, 0.5f)] public float coyoteTime;
+    public Vector3 currentPosition;
 }

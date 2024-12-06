@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     
 
     private new Rigidbody rigidbody;
-    private LayerMask groundMask;
+    private LayerMask masks;
     private InputAction moveAction;
     private InputAction jumpAction;
 
@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     {
         rigidbody = GetComponent<Rigidbody>();
 
-        groundMask = LayerMask.GetMask("Ground");
+        masks = LayerMask.GetMask("Ground", "Wall");
 
         moveAction = InputSystem.actions.FindAction("Move");
         jumpAction = InputSystem.actions.FindAction("Jump");
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckGround()
     {
-        if (Physics.Raycast(transform.position, Vector3.down, 1.2f, groundMask))
+        if (Physics.Raycast(transform.position, Vector3.down, 1.2f, masks))
         {
             playerData.inAir = false; // Is in ground
 
@@ -96,6 +96,8 @@ public class PlayerController : MonoBehaviour
         {
             Vector2 moveValue = moveAction.ReadValue<Vector2>();
             rigidbody.linearVelocity = new Vector3(moveValue.x * playerData.movementSpeed, rigidbody.linearVelocity.y, moveValue.y * playerData.movementSpeed);
+
+            playerData.currentPosition = transform.position;
         } 
     }
 
