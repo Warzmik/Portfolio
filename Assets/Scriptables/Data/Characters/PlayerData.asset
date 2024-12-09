@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canBeControlled: 1
   canMove: 1
-  canJump: 0
-  inAir: 1
+  canJump: 1
+  inAir: 0
   movementSpeed: 7
-  jumpForce: 10
+  jumpForce: 3
   coyoteTime: 0.25
+  currentPosition: {x: -2.3548813, y: 1.0457051, z: -0.2524173}

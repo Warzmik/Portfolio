@@ -1,12 +1,16 @@
 using UnityEngine;
+using Collectables;
 
-public class CheckCollectables : MonoBehaviour
+namespace Characters.Player 
 {
-    private void OnTriggerEnter(Collider other)
+    public class CheckCollectables : MonoBehaviour
     {
-        if (other.TryGetComponent(out ICollectable collectable))
+        private void OnTriggerEnter(Collider other)
         {
-            collectable.Collect();
+            if (other.TryGetComponent(out ICollectable collectable))
+            {
+                collectable.Collect();
+            }
         }
     }
 }

@@ -2,42 +2,45 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Crystal : MonoBehaviour, ICollectable
+namespace Collectables 
 {
-    [field: SerializeField] public GameData gameData { set; get; }
-    public UnityAction onCollect;
-
-
-    private void OnEnable()
+    public class Crystal : MonoBehaviour, ICollectable
     {
-        GetComponent<SphereCollider>().enabled = true;
-        GetComponent<MeshRenderer>().enabled = true;
-    }
+        [field: SerializeField] public GameData gameData { set; get; }
+        public UnityAction onCollect;
 
 
-    private void Update()
-    {
-        transform.Rotate(Vector3.one * Time.deltaTime * 20f); // Rotation effect
-    }
+        private void OnEnable()
+        {
+            GetComponent<SphereCollider>().enabled = true;
+            GetComponent<MeshRenderer>().enabled = true;
+        }
 
 
-    public void Collect()
-    {
-        // Desactivate components
-        GetComponent<SphereCollider>().enabled = false;
-        GetComponent<MeshRenderer>().enabled = false;
-
-        gameData.crystals ++;
-        onCollect?.Invoke();
-        
-        StartCoroutine(WaitForDestroy());
-    }
+        private void Update()
+        {
+            transform.Rotate(Vector3.one * Time.deltaTime * 20f); // Rotation effect
+        }
 
 
-    private IEnumerator WaitForDestroy()
-    {
-        yield return new WaitForSeconds(2f); // Wait for desactivate gameObject
+        public void Collect()
+        {
+            // Desactivate components
+            GetComponent<SphereCollider>().enabled = false;
+            GetComponent<MeshRenderer>().enabled = false;
 
-        gameObject.SetActive(false);
+            gameData.crystals ++;
+            onCollect?.Invoke();
+            
+            StartCoroutine(WaitForDestroy());
+        }
+
+
+        private IEnumerator WaitForDestroy()
+        {
+            yield return new WaitForSeconds(2f); // Wait for desactivate gameObject
+
+            gameObject.SetActive(false);
+        }
     }
 }

@@ -1,7 +1,8 @@
-using UnityEngine;
-
-public interface ICollectable
+namespace Collectables
 {
-    public GameData gameData { set; get;}
-    public void Collect();
+    public interface ICollectable
+    {
+        public GameData gameData { set; get;}
+        public void Collect();
+    }
 }
