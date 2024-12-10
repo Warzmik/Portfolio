@@ -16,7 +16,7 @@ namespace Characters.Player
         private new Rigidbody rigidbody;
         private Camera mainCamera;
         private InputAction moveAction;
-          private bool isMovingInvoked;
+        private bool isMovingInvoked;
 
 
         private void Awake()
@@ -24,6 +24,9 @@ namespace Characters.Player
             rigidbody = GetComponent<Rigidbody>();
             mainCamera = Camera.main;
             moveAction = InputSystem.actions.FindAction("Move");
+
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
         }
 
 
@@ -58,7 +61,8 @@ namespace Characters.Player
 
             Vector2 moveValue = moveAction.ReadValue<Vector2>();
             Vector3 direction = new Vector3(moveValue.x, 0, moveValue.y);
-            Vector3 moveDirection = mainCamera.transform.forward * direction.z + mainCamera.transform.right * direction.x;
+            Vector3 cameraForward = mainCamera.transform.forward;
+            Vector3 moveDirection =cameraForward * direction.z + mainCamera.transform.right * direction.x;
 
             rigidbody.linearVelocity = new Vector3(
                 moveDirection.x * playerData.movementSpeed, 
@@ -66,8 +70,15 @@ namespace Characters.Player
                 moveDirection.z * playerData.movementSpeed
             );
 
-            moveDirection.y = 0f;
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), 10f * Time.deltaTime);
+            switch (playerData.cameraMode)
+            {
+                case CameraModes.Normal: // Rotation when camera is in normal mode
+
+                    moveDirection.y = 0f;
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), 10f * Time.deltaTime);
+
+                break;
+            }
 
             playerData.currentPosition = transform.position;
         }

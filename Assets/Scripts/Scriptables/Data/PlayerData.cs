@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "PlayerData", menuName = "Data/Player")]
 public class PlayerData : ScriptableObject
 {
+    public CameraModes cameraMode = CameraModes.Normal;
     public bool canBeControlled;
     public bool canMove;
     public bool canJump;
