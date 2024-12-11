@@ -1,1 +1,1 @@
-public enum CameraModes { Normal, Aim }
+public enum CameraModes { Normal, Aim, Target }
