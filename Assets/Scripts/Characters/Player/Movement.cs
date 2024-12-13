@@ -17,6 +17,7 @@ namespace Characters.Player
         private Camera mainCamera;
         private InputAction moveAction;
         private bool isMovingInvoked;
+        private Vector3 moveDirection;
 
 
         private void Awake()
@@ -44,6 +45,11 @@ namespace Characters.Player
             if (moveAction.WasReleasedThisFrame())
             {
                 isMovingInvoked = false;
+                playerData.isMoving = false;
+
+                moveDirection = Vector3.zero;
+                playerData.moveDirection = moveDirection;
+
                 onMovementStop?.Invoke();
             }
 
@@ -51,6 +57,7 @@ namespace Characters.Player
             if (moveAction.IsPressed())
             {
                 isMovingInvoked = true;
+                playerData.isMoving = true;
             }
         }
 
@@ -62,7 +69,7 @@ namespace Characters.Player
             Vector2 moveValue = moveAction.ReadValue<Vector2>();
             Vector3 direction = new Vector3(moveValue.x, 0, moveValue.y);
             Vector3 cameraForward = mainCamera.transform.forward;
-            Vector3 moveDirection =cameraForward * direction.z + mainCamera.transform.right * direction.x;
+            moveDirection = cameraForward * direction.z + mainCamera.transform.right * direction.x;
 
             rigidbody.linearVelocity = new Vector3(
                 moveDirection.x * playerData.movementSpeed, 
@@ -75,11 +82,15 @@ namespace Characters.Player
                 case CameraModes.Normal: // Rotation when camera is in normal mode
 
                     moveDirection.y = 0f;
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), 10f * Time.deltaTime);
+                    if (moveDirection != Vector3.zero)
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDirection), 10f * Time.deltaTime);
+                    }
 
                 break;
             }
 
+            playerData.moveDirection = moveDirection;
             playerData.currentPosition = transform.position;
         }
     }

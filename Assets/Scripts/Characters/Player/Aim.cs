@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Characters.Enemy;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 namespace Characters.Player
@@ -10,6 +11,10 @@ namespace Characters.Player
     { 
         [SerializeField] private PlayerData playerData;
         [SerializeField] private CinemachineCamera targetCamera;
+
+        public UnityEvent onTargetCamera;
+        public UnityEvent onAimCamera;
+        public UnityEvent onNormalCamera;
 
         private InputAction aimAction;
         private InputAction targetAction;
@@ -49,16 +54,19 @@ namespace Characters.Player
             if (aimAction.WasPressedThisFrame() && enemiesInRange.Count > 0) // Camera target mode
             {
                 playerData.cameraMode = CameraModes.Target;
+                onTargetCamera?.Invoke();
             }
 
             if (aimAction.WasPressedThisFrame() && enemiesInRange.Count == 0) // Camera aim mode
             {
                 playerData.cameraMode = CameraModes.Aim;
+                onAimCamera?.Invoke();
             }
 
             if (aimAction.WasReleasedThisFrame()) // Camera normal mode
             {
                 playerData.cameraMode = CameraModes.Normal;
+                onNormalCamera?.Invoke();
             }
 
             if (aimAction.IsPressed())

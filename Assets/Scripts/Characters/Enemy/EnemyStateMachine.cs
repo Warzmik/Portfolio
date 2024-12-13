@@ -6,6 +6,7 @@ namespace Characters.Enemy
     public class EnemyStateMachine : MonoBehaviour
     {
         [SerializeField] private string initialState;
+        [SerializeField] private Animator animator;
 
         private Dictionary<string, IEnemyState> states = new Dictionary<string, IEnemyState>();
 
@@ -38,6 +39,8 @@ namespace Characters.Enemy
             {
                 states[stateName].ActivateState();
             }
+
+            animator.SetTrigger(stateName);
         }
     }
 }

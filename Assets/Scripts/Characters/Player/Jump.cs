@@ -32,11 +32,13 @@ namespace Characters.Player
             if (jumpAction.WasReleasedThisFrame())
             {
                 isJumpingInvoked = false;
+                playerData.isJumping = false;
             }
 
             if (jumpAction.WasPressedThisFrame())
             {
                 isJumpingInvoked = true;
+                playerData.isJumping = true;
             }
         }
 
@@ -46,9 +48,15 @@ namespace Characters.Player
             if (!playerData.canBeControlled || !playerData.canJump || playerData.inAir || !isJumpingInvoked) return;
 
             playerData.canJump = false;
-            onJumpStart?.Invoke();
 
-            rigidbody.AddForce(Vector3.up * playerData.jumpForce, ForceMode.Impulse);
+            switch (playerData.cameraMode)
+            {
+                case CameraModes.Normal:
+                    onJumpStart?.Invoke();
+                    rigidbody.AddForce(Vector3.up * playerData.jumpForce, ForceMode.Impulse);
+                    break;
+            }
+           
         }
     }
 }

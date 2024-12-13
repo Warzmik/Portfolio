@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab27f29ebd5a2db4ca5b6089747b7d90, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
+  cameraMode: 0
   canBeControlled: 1
   canMove: 1
   canJump: 1
   inAir: 0
   movementSpeed: 7
+  dashForce: 20
   jumpForce: 3
   coyoteTime: 0.25
-  currentPosition: {x: -2.3548813, y: 1.0457051, z: -0.2524173}
+  currentPosition: {x: 11.737502, y: 0.9994024, z: 17.603373}

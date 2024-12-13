@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerData", menuName = "Data/Player")]
@@ -9,8 +8,11 @@ public class PlayerData : ScriptableObject
     public bool canMove;
     public bool canJump;
     public bool inAir;
+    public bool isMoving;
+    public bool isJumping;
     public float movementSpeed;
     public float jumpForce;
     [Range(0f, 0.5f)] public float coyoteTime;
+    public Vector3 moveDirection;
     public Vector3 currentPosition;
 }
