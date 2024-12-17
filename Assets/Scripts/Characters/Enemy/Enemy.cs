@@ -15,10 +15,16 @@ namespace Characters.Enemy
 
         }
 
+        
+        public void Hit(float attackForce)
+        {
+            Debug.Log("Enemy hit");
+        }
+
 
         public Transform GetTransform()
         {
             return transform;
-        } 
+        }
     }
 }

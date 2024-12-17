@@ -9,23 +9,16 @@ namespace Characters.Player
         [SerializeField] private Animator animator;
 
 
-        private void Update()
+        private void LateUpdate()
         {
-            animator.SetBool("air", playerData.inAir);
-            animator.SetBool("jump", playerData.isJumping);
-            animator.SetBool("move", playerData.isMoving);
+            animator.SetInteger("groundType", (int) playerData.groundType);
+            animator.SetInteger("cameraType", (int) playerData.cameraMode);
+            
+            animator.SetFloat("moveValue", playerData.moveValue);
 
-            switch (playerData.cameraMode)
-            {
-                case CameraModes.Normal:
-                    animator.SetInteger("camera", 0);
-                    break;
-
-                case CameraModes.Target:
-                case CameraModes.Aim:
-                    animator.SetInteger("camera", 1);
-                    break;
-            }
+            animator.SetBool("isMoving", playerData.isMoving);
+            animator.SetBool("isJumping", playerData.isJumping);
+            animator.SetBool("isAttacking", playerData.isAttacking);
         }
     }
 }

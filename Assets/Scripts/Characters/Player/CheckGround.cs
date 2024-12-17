@@ -14,43 +14,29 @@ namespace Characters.Player
 
         private LayerMask masks;
 
-        private float coyoteTimer;
-        private bool isTouchGroundInvoked;
-
 
         private void Awake()
         {
-            masks = LayerMask.GetMask("Ground", "Wall");
+            masks = LayerMask.GetMask("Floor");
         }
 
 
-        private void Update()
+        private void OnCollisionEnter(Collision collision)
         {
-            if (Physics.Raycast(transform.position, Vector3.down, 1.2f, masks))
+            if ((masks.value & (1 << collision.transform.gameObject.layer)) > 0)
             {
-                playerData.inAir = false; // Is in ground
-                playerData.canJump = true;
-
-                if (!isTouchGroundInvoked) // Invoke touch ground event once
-                {
-                    isTouchGroundInvoked = true;
-                    onTouchGround?.Invoke();
-                }
+                playerData.groundType = GroundTypes.Floor;
+                onTouchGround?.Invoke();
             }
-            else
+        }
+
+
+        private void OnCollisionExit(Collision collision)
+        {
+            if ((masks.value & (1 << collision.transform.gameObject.layer)) > 0)
             {
-                coyoteTimer += Time.deltaTime;
-
-                if (coyoteTimer < playerData.coyoteTime) return;
-
-                playerData.inAir = true; // Is in air
-                coyoteTimer = 0f;
-
-                if (isTouchGroundInvoked)
-                {
-                    isTouchGroundInvoked = false;
-                    onAir?.Invoke();
-                }
+                playerData.groundType = GroundTypes.Air;
+                onAir?.Invoke();
             }
         }
     }

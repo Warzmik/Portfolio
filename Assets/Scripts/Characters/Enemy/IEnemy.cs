@@ -8,5 +8,6 @@ namespace Characters.Enemy
         public Transform GetTransform(); 
         public void InRange(bool inRange);
         public void SetTarget(bool isTarget);
+        public void Hit(float attackForce);
     }
 }
