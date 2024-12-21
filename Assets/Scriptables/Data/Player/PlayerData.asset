@@ -12,19 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ea41d06e51ffbd46b693fe1991ee017, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  groundType: 0
-  cameraMode: 0
   life: 10
   moveForce: 7
   jumpForce: 9
   attackForce: 2
+  powerForce: 2
+  powerDuration: 5
+  groundType: 0
+  cameraMode: 0
   moveValue: 0
-  moveDirection: {x: 0, y: 0, z: -0}
-  currentPosition: {x: -5.519268, y: 0.57833195, z: 4.9001894}
+  attackCount: 0
+  moveDirection: {x: 0, y: 0, z: 0}
+  currentPosition: {x: -0.5137825, y: 0.05000007, z: 1.7544674}
+  targetPosition: {x: 0, y: 0, z: 0}
   canMove: 1
   canJump: 1
   canAttack: 1
-  isMoving: 1
+  canUsePower: 1
+  isMoving: 0
   isJumping: 0
   isTargeting: 0
   isAttacking: 0
+  isUsingPower: 0

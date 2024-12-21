@@ -19,35 +19,41 @@ namespace Characters.Player
         private void Awake()
         {
             attackAction = InputSystem.actions.FindAction("Attack");
-            playerData.makingDamage = false;
+            playerData.attackCount = 0;
         }
 
 
         private void Update()
         {
-            if (!playerData.canAttack) return;
+            if (!playerData.canAttack || playerData.groundType != GroundTypes.Floor || playerData.cameraMode != CameraModes.Target) return;
 
             if (attackAction.WasReleasedThisFrame())
             {
                 playerData.isAttacking = false;
-                StartCoroutine(AttackTime());
+
+                StopCoroutine("ResetAttackCount");
+                StartCoroutine("ResetAttackCount");
             }
 
-            if (attackAction.WasPressedThisFrame() && playerData.groundType == GroundTypes.Floor && playerData.cameraMode == CameraModes.Target)
+            if (attackAction.WasPressedThisFrame())
             {
                 playerData.isAttacking = true;
-                playerData.makingDamage = true;
+                playerData.attackCount++;
 
-                StopAllCoroutines();
+                if (playerData.attackCount > 4)
+                {
+                    playerData.attackCount = 1;
+                }
+
+                StopCoroutine("ResetAttackCount");
             }
         }
 
 
-        private IEnumerator AttackTime()
+        private IEnumerator ResetAttackCount()
         {
-            yield return new WaitForSeconds(0.25f);
-
-            playerData.makingDamage = false;
+            yield return new WaitForSeconds(0.5f);
+            playerData.attackCount = 0;
         }
     }
 }

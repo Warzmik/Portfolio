@@ -13,12 +13,14 @@ namespace Characters.Player
         {
             animator.SetInteger("groundType", (int) playerData.groundType);
             animator.SetInteger("cameraType", (int) playerData.cameraMode);
+            animator.SetInteger("attackCount", playerData.attackCount);
             
             animator.SetFloat("moveValue", playerData.moveValue);
 
             animator.SetBool("isMoving", playerData.isMoving);
             animator.SetBool("isJumping", playerData.isJumping);
             animator.SetBool("isAttacking", playerData.isAttacking);
+            animator.SetBool("isUsingPower", playerData.isUsingPower);
         }
     }
 }

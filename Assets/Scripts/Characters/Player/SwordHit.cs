@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 using Characters.Enemy;
 
 namespace Characters.Player
@@ -8,17 +7,12 @@ namespace Characters.Player
     {
         [SerializeField] private PlayerData playerData;
 
-        [Space]
 
-        public UnityEvent onSwordHit;
-
-
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerStay(Collider other)
         {
-            if (other.TryGetComponent(out IEnemy enemy) && playerData.makingDamage)
+            if (other.TryGetComponent(out IEnemy enemy) && playerData.isAttacking)
             {
                 enemy.Hit(playerData.attackForce);
-                onSwordHit?.Invoke();
             }
         }
     }

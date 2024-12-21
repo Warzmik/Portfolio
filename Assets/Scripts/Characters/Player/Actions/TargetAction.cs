@@ -74,6 +74,8 @@ namespace Characters.Player.Actions
                 playerData.isTargeting = false;
                 playerData.cameraMode = CameraModes.Normal;
                 onNormalCamera?.Invoke();
+
+                playerData.targetPosition = Vector3.zero;
             }
 
             if (aimAction.IsPressed())
@@ -81,8 +83,9 @@ namespace Characters.Player.Actions
                 if (enemiesInRange.Count == 1 && targetCamera.LookAt != enemiesInRange[0].GetTransform())
                 {
                     IEnemy enemySelected = enemiesInRange[0];
+                    Transform enemyTransform = enemySelected.GetTransform();
 
-                    targetCamera.LookAt = enemySelected.GetTransform();
+                    targetCamera.LookAt = enemyTransform;
                     SetHowTarget(enemySelected);
 
                     targetIndex = 0;
@@ -105,9 +108,10 @@ namespace Characters.Player.Actions
                     }
 
                     IEnemy enemySelected = enemiesInRange[targetIndex];
+                    Transform enemyTransform = enemySelected.GetTransform();
 
-                    targetCamera.LookAt = enemySelected.GetTransform();
-                    SetHowTarget(enemySelected);
+                    targetCamera.LookAt = enemyTransform;
+                    SetHowTarget(enemySelected);                  
                 }
             }
         }
@@ -117,7 +121,12 @@ namespace Characters.Player.Actions
         {
             if (playerData.cameraMode == CameraModes.Target)
             {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Camera.main.transform.forward), 15f * Time.deltaTime);
+                Vector3 enemyPosition = enemiesInRange[targetIndex].GetTransform().position;
+
+                playerData.targetPosition = enemyPosition;
+                enemyPosition.y = 0;
+
+                transform.LookAt(enemyPosition);
             }
         }
 

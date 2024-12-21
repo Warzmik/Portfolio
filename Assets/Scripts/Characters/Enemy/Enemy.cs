@@ -1,9 +1,20 @@
 using UnityEngine;
+using Characters.Enemy.States;
 
 namespace Characters.Enemy 
 {
+    [RequireComponent(typeof(EnemyStateMachine))]
     public class Enemy : MonoBehaviour, IEnemy
     {
+        private EnemyStateMachine stateMachine;
+
+
+        private void Awake()
+        { 
+            stateMachine = GetComponent<EnemyStateMachine>();
+        }
+
+
         public void InRange(bool inRange)
         {
 
@@ -18,7 +29,7 @@ namespace Characters.Enemy
         
         public void Hit(float attackForce)
         {
-            Debug.Log("Enemy hit");
+            stateMachine.SwitchState(EnemyStateType.Hit);
         }
 
 
