@@ -1,5 +1,4 @@
 using UnityEngine;
-using Characters.Enemy;
 
 namespace Characters.Player
 {
@@ -8,11 +7,12 @@ namespace Characters.Player
         [SerializeField] private PlayerData playerData;
 
 
-        private void OnTriggerStay(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out IEnemy enemy) && playerData.isAttacking)
+            if (other.TryGetComponent(out IDamageable damageable) && playerData.isAttacking)
             {
-                enemy.Hit(playerData.attackForce);
+                damageable.Hit(playerData.attackForce);
+                playerData.isAttacking = false;
             }
         }
     }

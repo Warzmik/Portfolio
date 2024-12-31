@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Characters.Enemy;
+using NUnit.Framework;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,7 +23,7 @@ namespace Characters.Player.Actions
 
         private InputAction aimAction;
         private InputAction targetAction;
-        private List<IEnemy> enemiesInRange = new List<IEnemy>();
+        private List<EnemyController> enemiesInRange = new List<EnemyController>();
         private int targetIndex;
 
 
@@ -35,7 +36,7 @@ namespace Characters.Player.Actions
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out IEnemy enemy))
+            if (other.TryGetComponent(out EnemyController enemy))
             {
                 enemiesInRange.Add(enemy);
                 enemy.InRange(true);
@@ -46,7 +47,7 @@ namespace Characters.Player.Actions
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.TryGetComponent(out IEnemy enemy))
+            if (other.TryGetComponent(out EnemyController enemy))
             {
                 enemiesInRange.Remove(enemy);
                 enemy.InRange(false);
@@ -62,6 +63,12 @@ namespace Characters.Player.Actions
 
         private void Update()
         {
+            if (enemiesInRange.Count > 0)
+            {
+                CheckForActiveTargets();
+            }
+
+
             if (aimAction.WasPressedThisFrame() && enemiesInRange.Count > 0) // Camera target mode
             {
                 playerData.isTargeting = true;
@@ -69,7 +76,7 @@ namespace Characters.Player.Actions
                 onTargetCamera?.Invoke();
             }
 
-            if (aimAction.WasReleasedThisFrame()) // Camera normal mode
+            if (aimAction.WasReleasedThisFrame() || enemiesInRange.Count == 0) // Camera normal mode
             {
                 playerData.isTargeting = false;
                 playerData.cameraMode = CameraModes.Normal;
@@ -80,10 +87,10 @@ namespace Characters.Player.Actions
 
             if (aimAction.IsPressed())
             {
-                if (enemiesInRange.Count == 1 && targetCamera.LookAt != enemiesInRange[0].GetTransform())
+                if (enemiesInRange.Count == 1 && targetCamera.LookAt != enemiesInRange[0].transform)
                 {
-                    IEnemy enemySelected = enemiesInRange[0];
-                    Transform enemyTransform = enemySelected.GetTransform();
+                    EnemyController enemySelected = enemiesInRange[0];
+                    Transform enemyTransform = enemySelected.transform;
 
                     targetCamera.LookAt = enemyTransform;
                     SetHowTarget(enemySelected);
@@ -107,8 +114,8 @@ namespace Characters.Player.Actions
                         targetIndex = 0;
                     }
 
-                    IEnemy enemySelected = enemiesInRange[targetIndex];
-                    Transform enemyTransform = enemySelected.GetTransform();
+                    EnemyController enemySelected = enemiesInRange[targetIndex];
+                    Transform enemyTransform = enemySelected.transform;
 
                     targetCamera.LookAt = enemyTransform;
                     SetHowTarget(enemySelected);                  
@@ -119,9 +126,9 @@ namespace Characters.Player.Actions
 
         private void FixedUpdate()
         {
-            if (playerData.cameraMode == CameraModes.Target)
+            if (playerData.cameraMode == CameraModes.Target && enemiesInRange.Count > 0)
             {
-                Vector3 enemyPosition = enemiesInRange[targetIndex].GetTransform().position;
+                Vector3 enemyPosition = enemiesInRange[targetIndex].transform.position; //BUGGGGGGGG
 
                 playerData.targetPosition = enemyPosition;
                 enemyPosition.y = 0;
@@ -131,14 +138,26 @@ namespace Characters.Player.Actions
         }
 
 
-        private void SetHowTarget(IEnemy target)
+        private void SetHowTarget(EnemyController target)
         {
-            foreach (IEnemy enemy in enemiesInRange)
+            foreach (EnemyController enemy in enemiesInRange)
             {
                 enemy.SetTarget(false);
             }
 
             target.SetTarget(true);
+        }
+
+
+        private void CheckForActiveTargets()
+        {
+            for (int i = enemiesInRange.Count - 1; i >= 0; i--)
+            {
+                if (!enemiesInRange[i].gameObject.activeInHierarchy)
+                {
+                    enemiesInRange.RemoveAt(i);
+                }
+            }
         }
     }
 }

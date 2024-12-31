@@ -5,9 +5,6 @@ namespace Characters.Enemy.States
 {
     public class EnemyStateMachine : MonoBehaviour
     {
-        [SerializeField] private EnemyStateType initialState;
-        [SerializeField] private Animator animator;
-
         private Dictionary<EnemyStateType, EnemyState> statesList = new Dictionary<EnemyStateType, EnemyState>();
         private EnemyStateType currentstate;
         private EnemyStateType lastState;
@@ -22,25 +19,32 @@ namespace Characters.Enemy.States
                 statesList.Add(state.stateType, state);
             }
 
-            currentstate = initialState;
+            currentstate = EnemyStateType.Init;
             lastState = currentstate;
         }
 
 
         private void Start()
         {
-            SwitchState(initialState);
+            SwitchState(EnemyStateType.Init);
         }
 
 
         public void SwitchState(EnemyStateType stateType) 
         {
-            statesList[currentstate].ExitState(this);
-            lastState = currentstate;
-            currentstate = stateType;
-            statesList[currentstate].StartState(this);
-
-            animator.SetTrigger(stateType.ToString());
+            if (stateType == EnemyStateType.LastState)
+            {
+                statesList[currentstate].ExitState(this);
+                currentstate = lastState;
+                statesList[lastState].StartState(this);
+            }
+            else
+            {
+                statesList[currentstate].ExitState(this);
+                lastState = currentstate;
+                currentstate = stateType;
+                statesList[currentstate].StartState(this);
+            }
         } 
     }
 }

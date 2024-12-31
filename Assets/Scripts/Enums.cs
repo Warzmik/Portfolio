@@ -1,3 +1,3 @@
 public enum CameraModes { Normal, Target }
-public enum EnemyStateType { Init, Patrol, Hit }
+public enum EnemyStateType { LastState, Init, Patrol, Die, Combat }
 public enum GroundTypes { Floor, Air }

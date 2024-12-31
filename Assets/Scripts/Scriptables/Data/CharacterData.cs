@@ -36,4 +36,13 @@ public class PlayerData : ScriptableObject
     public bool isTargeting;
     public bool isAttacking;
     public bool isUsingPower;
+
+
+    public void AllConstraints(bool value)
+    {
+        canMove = value;
+        canJump = value;
+        canAttack = value;
+        canUsePower = value;
+    }
 }
